@@ -17,7 +17,45 @@ for (let i = 0; i < collisions.length; i += 70) {
   collisionsMap.push(collisions.slice(i, 70 + i));
   //console.log(collisions.slice(i , 70+i))
 }
-console.log(collisionsMap);
+//console.log(collisionsMap);
+
+class Boundary {
+  static width = 48;
+  static height = 48;
+  constructor({ position }) {
+    this.position = position;
+    this.width = 48; //the block was 12x2 but then we zoomed our map to 400% so 12x4=48
+    this.height = 48;
+  }
+  draw() {
+    c.fillStyle = "red";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+  }
+}
+
+const boundaries = [];
+
+const offset = {
+  x: -735,
+  y: -610,
+};
+
+collisionsMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    //console.log(symbol)
+    if (symbol === 1)
+      boundaries.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      );
+  });
+});
+
+console.log(boundaries);
 
 const image = new Image();
 image.src = "img/PelletTown.png";
@@ -38,9 +76,8 @@ class Sprite {
 
 const background = new Sprite({
   position: {
-    x: -735,
-    y: -610,
-    // -785, -650
+    x: offset.x,
+    y: offset.y,
   },
   image: image,
 });
@@ -60,10 +97,23 @@ const keys = {
   },
 };
 
+const testBoundary = new Boundary({
+  position: {
+    x: 400,
+    y: 400,
+  },
+});
+
+const movables = [background, testBoundary];
+
 function animate() {
   window.requestAnimationFrame(animate);
   //console.log('animate')
   background.draw();
+  // boundaries.forEach((boundary) => {
+  //   boundary.draw();
+  // });
+  testBoundary.draw();
   c.drawImage(
     playerImage,
     0,
@@ -75,15 +125,32 @@ function animate() {
     playerImage.width / 4,
     playerImage.height
   );
+
+  if (player.position.x + player.width) {
+  }
+
   if (keys.w.pressed && lastKey === "w") {
-    background.position.y += 3;
+    movables.forEach((movable) => {
+      movable.position.y += 3;
+    });
+    // background.position.y += 3;
     //console.log(background.position.y)
+    // testBoundary.position.y += 3;
   } else if (keys.a.pressed && lastKey === "a") {
-    background.position.x += 3;
+    // background.position.x += 3;
+    movables.forEach((movable) => {
+      movable.position.x += 3;
+    });
   } else if (keys.s.pressed && lastKey === "s") {
-    background.position.y -= 3;
+    // background.position.y -= 3;
+    movables.forEach((movable) => {
+      movable.position.y -= 3;
+    });
   } else if (keys.d.pressed && lastKey === "d") {
-    background.position.x -= 3;
+    // background.position.x -= 3;
+    movables.forEach((movable) => {
+      movable.position.x -= 3;
+    });
   }
 }
 animate();
