@@ -1,7 +1,7 @@
 const canvas = document.querySelector("canvas");
 //context
 const c = canvas.getContext("2d");
-
+console.log(battleZonesData);
 console.log(collisions);
 
 canvas.width = 1024;
@@ -19,6 +19,12 @@ for (let i = 0; i < collisions.length; i += 70) {
 }
 //console.log(collisionsMap);
 
+const battleZonesMap = [];
+for (let i = 0; i < battleZonesData.length; i += 70) {
+  battleZonesMap.push(battleZonesData.slice(i, 70 + i));
+}
+console.log(battleZonesMap);
+
 const boundaries = [];
 
 const offset = {
@@ -31,6 +37,23 @@ collisionsMap.forEach((row, i) => {
     //console.log(symbol)
     if (symbol === 1)
       boundaries.push(
+        new Boundary({
+          position: {
+            x: j * Boundary.width + offset.x,
+            y: i * Boundary.height + offset.y,
+          },
+        })
+      );
+  });
+});
+
+const battleZones = [];
+
+battleZonesMap.forEach((row, i) => {
+  row.forEach((symbol, j) => {
+    //console.log(symbol)
+    if (symbol === 1)
+      battleZones.push(
         new Boundary({
           position: {
             x: j * Boundary.width + offset.x,
@@ -75,7 +98,7 @@ const player = new Sprite({
     left: playerLeftImage,
     down: playerDownImage,
     right: playerRightImage,
-  }
+  },
 });
 
 const background = new Sprite({
@@ -116,7 +139,7 @@ const keys = {
 //   },
 // });
 
-const movables = [background, ...boundaries, foreground];
+const movables = [background, ...boundaries, foreground, ...battleZones];
 
 function rectangularCollision({ rectangle1, rectangle2 }) {
   return (
@@ -135,14 +158,17 @@ function animate() {
     boundary.draw();
   });
   // testBoundary.draw();
+  battleZones.forEach((battleZone) => {
+    battleZone.draw();
+  });
   player.draw();
   foreground.draw();
 
   let moving = true;
   player.moving = false;
   if (keys.w.pressed && lastKey === "w") {
-    player.moving = true
-    player.image = player.sprites.up
+    player.moving = true;
+    player.image = player.sprites.up;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -171,8 +197,8 @@ function animate() {
     //console.log(background.position.y)
     // testBoundary.position.y += 3;
   } else if (keys.a.pressed && lastKey === "a") {
-    player.moving = true
-    player.image = player.sprites.left
+    player.moving = true;
+    player.image = player.sprites.left;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -199,8 +225,8 @@ function animate() {
       });
     }
   } else if (keys.s.pressed && lastKey === "s") {
-    player.moving = true
-    player.image = player.sprites.down
+    player.moving = true;
+    player.image = player.sprites.down;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -227,8 +253,8 @@ function animate() {
       });
     }
   } else if (keys.d.pressed && lastKey === "d") {
-    player.moving = true
-    player.image = player.sprites.right
+    player.moving = true;
+    player.image = player.sprites.right;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
