@@ -1,8 +1,9 @@
 const canvas = document.querySelector("canvas");
 //context
 const c = canvas.getContext("2d");
-console.log(battleZonesData);
-console.log(collisions);
+// console.log(battleZonesData);
+// console.log(collisions);
+// console.log(gsap);
 
 canvas.width = 1024;
 canvas.height = 576;
@@ -150,8 +151,8 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
   );
 }
 const battle = {
-  initiated: false
-}
+  initiated: false,
+};
 
 function animate() {
   window.requestAnimationFrame(animate);
@@ -169,9 +170,9 @@ function animate() {
 
   let moving = true;
   player.moving = false;
-  if (battle.initiated) return
-   
-  //activate a battle 
+  if (battle.initiated) return;
+
+  //activate a battle
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
     for (let i = 0; i < battleZones.length; i++) {
       const battleZone = battleZones[i];
@@ -195,7 +196,16 @@ function animate() {
         Math.random() < 0.01
       ) {
         console.log("activate battle");
-        battle.initiated = true
+        battle.initiated = true;
+        gsap.to("#overlappingDiv", {
+          opacity: 1,
+          repeat: 3,
+          yoyo: true,
+          duration: 0.4,
+          onComplete(){
+            
+          }
+        });
         break;
       }
     }
