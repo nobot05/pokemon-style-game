@@ -156,7 +156,7 @@ const battle = {
 
 function animate() {
   const animationId = window.requestAnimationFrame(animate);
-  console.log(animationId)
+  console.log(animationId);
   //console.log('animate')
   background.draw();
   boundaries.forEach((boundary) => {
@@ -171,7 +171,7 @@ function animate() {
 
   let moving = true;
   player.moving = false;
-  console.log(animationId)
+  console.log(animationId);
   if (battle.initiated) return;
 
   //activate a battle
@@ -198,22 +198,29 @@ function animate() {
         Math.random() < 0.01
       ) {
         console.log("activate battle");
+
         //deactivate current animation loop
-        window.cancelAnimationFrame(animationId)
+        window.cancelAnimationFrame(animationId);
         battle.initiated = true;
         gsap.to("#overlappingDiv", {
           opacity: 1,
           repeat: 3,
           yoyo: true,
           duration: 0.4,
-          onComplete(){
-            gsap.to('#overlappingDiv', {
+          onComplete() {
+            gsap.to("#overlappingDiv", {
               opacity: 1,
-              duration: 0.4
+              duration: 0.4,
+              onComplete() {
+                // activate a new animation loop
+                animateBattle();
+                gsap.to("#overlappingDiv", {
+                  opacity: 0,
+                  duration: 0.4
+                })
+              }
             })
-            // activate a new animation loop
-            animateBattle()
-          }
+          },
         });
         break;
       }
@@ -340,9 +347,19 @@ function animate() {
 }
 animate();
 
+const battleBackgroundImage = new Image();
+battleBackgroundImage.src = "img/battleBackground.png";
+const battleBackground = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  image: battleBackgroundImage
+});
+
 function animateBattle() {
-  window.requestAnimationFrame(animateBattle)
-  console.log('animating battle')
+  window.requestAnimationFrame(animateBattle);
+  battleBackground.draw();
 }
 
 let lastKey = "";
