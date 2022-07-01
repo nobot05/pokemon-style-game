@@ -93,7 +93,7 @@ const player = new Sprite({
   image: playerDownImage,
   frames: {
     max: 4,
-    hold: 10
+    hold: 10,
   },
   sprites: {
     up: playerUpImage,
@@ -217,10 +217,10 @@ function animate() {
                 animateBattle();
                 gsap.to("#overlappingDiv", {
                   opacity: 0,
-                  duration: 0.4
-                })
-              }
-            })
+                  duration: 0.4,
+                });
+              },
+            });
           },
         });
         break;
@@ -355,7 +355,7 @@ const battleBackground = new Sprite({
     x: 0,
     y: 0,
   },
-  image: battleBackgroundImage
+  image: battleBackgroundImage,
 });
 
 const draggleImage = new Image();
@@ -368,10 +368,11 @@ const draggle = new Sprite({
   image: draggleImage,
   frames: {
     max: 4,
-    hold: 30
+    hold: 30,
   },
-  animate: true
-})
+  animate: true,
+  isEnemy: true,
+});
 
 const embyImage = new Image();
 embyImage.src = "img/embySprite.png";
@@ -383,19 +384,32 @@ const emby = new Sprite({
   image: embyImage,
   frames: {
     max: 4,
-    hold: 30
+    hold: 30,
   },
-  animate: true
-})
+  animate: true,
+});
 
 function animateBattle() {
   window.requestAnimationFrame(animateBattle);
   battleBackground.draw();
-  draggle.draw()
-  emby.draw()
+  draggle.draw();
+  emby.draw();
 }
-animateBattle()
+animateBattle();
 // animate()
+
+document.querySelectorAll("button").forEach((button) => {
+  button.addEventListener("click", () => {
+    emby.attack({
+      attack: {
+        name: "Tackle",
+        damage: 10,
+        type: "Normal",
+      },
+      recipient: draggle,
+    });
+  });
+});
 
 let lastKey = "";
 window.addEventListener("keydown", (e) => {
