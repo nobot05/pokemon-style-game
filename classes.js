@@ -77,7 +77,7 @@ class Monster extends Sprite {
     rotation = 0,
     isEnemy = false,
     name,
-    attacks
+    attacks,
   }) {
     super({
       position,
@@ -91,8 +91,20 @@ class Monster extends Sprite {
     this.health = 100;
     this.isEnemy = isEnemy;
     this.name = name;
-    this.attacks = attacks
+    this.attacks = attacks;
   }
+
+  faint() {
+    console.log("fainting");
+    document.querySelector("#dialogueBox").innerHTML = this.name + " fainted!";
+    gsap.to(this.position, {
+      y: this.position.y + 20,
+    });
+    gsap.to(this, {
+      opacity: 0,
+    })
+  }
+
   attack({ attack, recipient, renderedSprites }) {
     document.querySelector("#dialogueBox").style.display = "block";
     document.querySelector("#dialogueBox").innerHTML =
@@ -102,7 +114,7 @@ class Monster extends Sprite {
     if (this.isEnemy) healthBar = "#playerHealthBar";
     let rotation = 1;
     if (this.isEnemy) rotation = -2.2;
-    this.health = this.health - attack.damage;
+    recipient.health -= attack.damage;
     switch (attack.name) {
       case "Fireball":
         const fireballImage = new Image();
@@ -127,7 +139,7 @@ class Monster extends Sprite {
           y: recipient.position.y,
           onComplete: () => {
             gsap.to(healthBar, {
-              width: this.health + "%",
+              width: recipient.health + "%",
             });
 
             gsap.to(recipient.position, {
@@ -162,7 +174,7 @@ class Monster extends Sprite {
             onComplete: () => {
               // enemy actually gets hit
               gsap.to(healthBar, {
-                width: this.health + "%",
+                width: recipient.health + "%",
               });
 
               gsap.to(recipient.position, {
