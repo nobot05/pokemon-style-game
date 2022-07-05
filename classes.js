@@ -6,9 +6,7 @@ class Sprite {
     frames = { max: 1, hold: 10 },
     sprites = [],
     animate = false,
-    isEnemy = false,
     rotation = 0,
-    name
   }) {
     this.position = position;
     this.image = image;
@@ -23,10 +21,7 @@ class Sprite {
     this.animate = animate;
     this.sprites = sprites;
     this.opacity = 1;
-    this.health = 100;
-    this.isEnemy = isEnemy;
     this.rotation = rotation;
-    this.name = name
   }
 
   draw() {
@@ -69,15 +64,44 @@ class Sprite {
       }
     }
   }
+}
 
+class Monster extends Sprite {
+  constructor({
+    position,
+    velocity,
+    image,
+    frames = { max: 1, hold: 10 },
+    sprites = [],
+    animate = false,
+    rotation = 0,
+    isEnemy = false,
+    name,
+    attacks
+  }) {
+    super({
+      position,
+      velocity,
+      image,
+      frames,
+      sprites,
+      animate,
+      rotation,
+    });
+    this.health = 100;
+    this.isEnemy = isEnemy;
+    this.name = name;
+    this.attacks = attacks
+  }
   attack({ attack, recipient, renderedSprites }) {
-    document.querySelector('#dialogueBox').style.display = 'block'
-    document.querySelector('#dialogueBox').innerHTML = this.name + ' used ' + attack.name
+    document.querySelector("#dialogueBox").style.display = "block";
+    document.querySelector("#dialogueBox").innerHTML =
+      this.name + " used " + attack.name;
 
     let healthBar = "#enemyHealthBar";
     if (this.isEnemy) healthBar = "#playerHealthBar";
-    let rotation = 1
-    if(this.isEnemy) rotation = -2.2
+    let rotation = 1;
+    if (this.isEnemy) rotation = -2.2;
     this.health = this.health - attack.damage;
     switch (attack.name) {
       case "Fireball":
@@ -94,7 +118,7 @@ class Sprite {
             hold: 10,
           },
           animate: true,
-          rotation
+          rotation,
         });
         // renderedSprites.push(fireball);
         renderedSprites.splice(1, 0, fireball);
@@ -162,7 +186,6 @@ class Sprite {
     }
   }
 }
-
 class Boundary {
   static width = 48;
   static height = 48;
