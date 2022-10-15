@@ -58,6 +58,8 @@ function initBattle() {
               gsap.to("#overlappingDiv", {
                 opacity: 0,
               });
+              battle.initiated = false;
+              audio.Map.play()
             },
           });
         });
@@ -89,6 +91,7 @@ function initBattle() {
                   opacity: 0,
                 });
                 battle.initiated = false;
+                audio.Map.play()
               },
             });
           });
@@ -114,9 +117,9 @@ function animateBattle() {
     sprite.draw();
   });
 }
-initBattle();
-animateBattle();
-// animate()
+// initBattle();
+// animateBattle();
+animate()
 
 document.querySelector("#dialogueBox").addEventListener("click", (e) => {
   if (queue.length > 0) {
