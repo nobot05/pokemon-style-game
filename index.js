@@ -376,6 +376,26 @@ window.addEventListener("keydown", (e) => {
       keys.d.pressed = true;
       lastKey = "d";
       break;
+    case "W":
+      //console.log('pressed w key')
+      keys.w.pressed = true;
+      lastKey = "w";
+      break;
+    case "A":
+      //console.log('pressed a key')
+      keys.a.pressed = true;
+      lastKey = "a";
+      break;
+    case "S":
+      //console.log('pressed s key')
+      keys.s.pressed = true;
+      lastKey = "s";
+      break;
+    case "D":
+      //console.log('pressed d key')
+      keys.d.pressed = true;
+      lastKey = "d";
+      break;
   }
   console.log(keys);
 });
@@ -392,6 +412,18 @@ window.addEventListener("keyup", (e) => {
       keys.s.pressed = false;
       break;
     case "d":
+      keys.d.pressed = false;
+      break;
+    case "W":
+      keys.w.pressed = false;
+      break;
+    case "A":
+      keys.a.pressed = false;
+      break;
+    case "S":
+      keys.s.pressed = false;
+      break;
+    case "D":
       keys.d.pressed = false;
       break;
   }
